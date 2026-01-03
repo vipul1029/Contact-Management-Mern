@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import API from "./api";
+
+import Header from "./components/Header";
 import ContactForm from "./components/ContactForm";
 import ContactList from "./components/ContactList";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
+import About from "./components/About";
+
 import heroImage from "./assets/contact-hero.jpg";
 
 function App() {
@@ -33,11 +36,11 @@ function App() {
 
   return (
     <div className="page-bg">
+      {/* HEADER */}
       <Header />
 
       {/* HERO SECTION */}
-      <div className="hero-container" id="home">
-        {/* LEFT */}
+      <section className="hero-container" id="home">
         <div className="hero-form">
           <header className="header">
             <h1>Let’s work together.</h1>
@@ -49,17 +52,20 @@ function App() {
           <ContactForm refreshContacts={fetchContacts} />
         </div>
 
-        {/* RIGHT */}
         <div className="hero-image">
-          <img src={heroImage} alt="Contact" />
+          <img src={heroImage} alt="Contact management" />
         </div>
-      </div>
+      </section>
 
       {/* CONTACT LIST */}
-      <div className="list-container" id="contacts">
+      <section className="list-container" id="contacts">
         <ContactList contacts={contacts} onDelete={deleteContact} />
-      </div>
+      </section>
 
+      {/* ABOUT SECTION */}
+      <About />
+
+      {/* FOOTER */}
       <Footer />
     </div>
   );

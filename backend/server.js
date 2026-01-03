@@ -1,82 +1,44 @@
-// const express = require("express");
-// const mongoose = require("mongoose");
-// const cors = require("cors");
-// require("dotenv").config();
-
-// const contactRoutes = require("./routes/contactRoutes");
-
-// const app = express();
-
-// /* ---------- Middleware ---------- */
-// app.use(cors());
-// app.use(express.json());
-
-// /* ---------- Routes ---------- */
-// app.use("/api/contacts", contactRoutes);
-
-// /* ---------- Health Check ---------- */
-// app.get("/", (req, res) => {
-//   res.send("Contact Management API is running");
-// });
-
-// /* ---------- Database Connection ---------- */
-// mongoose
-//   .connect(process.env.MONGO_URI)
-//   .then(() => {
-//     console.log("MongoDB Connected");
-//   })
-//   .catch((err) => {
-//     console.error("MongoDB connection error:", err);
-//   });
-
-// /* ---------- Server ---------- */
-// const PORT = process.env.PORT || 5000;
-
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
 
 
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+import contactRoutes from "./routes/contactRoutes.js";
 
-
-
-
-
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-require("dotenv").config();
-
-const contactRoutes = require("./routes/contactRoutes");
+dotenv.config();
 
 const app = express();
 
-/* Middleware */
-app.use(cors());
+/* ---------- Middlewares ---------- */
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "DELETE"],
+  allowedHeaders: ["Content-Type"]
+}));
 app.use(express.json());
 
-/* Routes */
-app.use("/api/contacts", contactRoutes);
-
-/* Health check */
+/* ---------- Routes ---------- */
 app.get("/", (req, res) => {
   res.send("Contact Management API is running");
 });
 
-/* MongoDB connection caching */
-let isConnected = false;
+app.use("/api/contacts", contactRoutes);
 
-async function connectDB() {
-  if (isConnected) return;
+/* ---------- MongoDB ---------- */
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.error(err));
 
-  await mongoose.connect(process.env.MONGO_URI);
-  isConnected = true;
+/* ---------- LOCAL SERVER ONLY ---------- */
+const PORT = process.env.PORT || 5000;
+
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 }
 
-app.use(async (req, res, next) => {
-  await connectDB();
-  next();
-});
-
-/* IMPORTANT: Export app (NO app.listen) */
-module.exports = app;
+/* ---------- EXPORT FOR VERCEL ---------- */
+export default app;

@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+
+import mongoose from "mongoose";
 
 const contactSchema = new mongoose.Schema(
   {
@@ -10,7 +11,7 @@ const contactSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      match: [/^\S+@\S+\.\S+$/, "Invalid email"]
+      lowercase: true
     },
     phone: {
       type: String,
@@ -20,7 +21,11 @@ const contactSchema = new mongoose.Schema(
       type: String
     }
   },
-  { timestamps: true }
+  {
+    timestamps: true
+  }
 );
 
-module.exports = mongoose.model("Contact", contactSchema);
+const Contact = mongoose.model("Contact", contactSchema);
+
+export default Contact;

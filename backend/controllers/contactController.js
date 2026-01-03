@@ -1,23 +1,46 @@
-const Contact = require("../models/Contact");
+import Contact from "../models/Contact.js";
 
-// POST: create contact
-exports.createContact = async (req, res) => {
+/* ---------- GET ALL CONTACTS ---------- */
+export const getContacts = async (req, res) => {
   try {
-    const contact = await Contact.create(req.body);
-    res.status(201).json(contact);
+    const contacts = await Contact.find().sort({ createdAt: -1 });
+    res.json(contacts);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ message: "Failed to fetch contacts" });
   }
 };
 
-// GET: fetch contacts
-exports.getContacts = async (req, res) => {
-  const contacts = await Contact.find().sort({ createdAt: -1 });
-  res.json(contacts);
+/* ---------- CREATE CONTACT ---------- */
+export const createContact = async (req, res) => {
+  try {
+    const { name, email, phone, message } = req.body;
+
+    if (!name || !email || !phone) {
+      return res.status(400).json({
+        message: "Name, email, and phone are required"
+      });
+    }
+
+    const newContact = await Contact.create({
+      name,
+      email,
+      phone,
+      message
+    });
+
+    res.status(201).json(newContact);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to create contact" });
+  }
 };
 
-// DELETE: delete contact
-exports.deleteContact = async (req, res) => {
-  await Contact.findByIdAndDelete(req.params.id);
-  res.json({ message: "Contact deleted" });
+/* ---------- DELETE CONTACT ---------- */
+export const deleteContact = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Contact.findByIdAndDelete(id);
+    res.json({ message: "Contact deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete contact" });
+  }
 };

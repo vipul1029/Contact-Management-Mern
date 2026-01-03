@@ -13,24 +13,38 @@ const ContactForm = ({ refreshContacts }) => {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Gmail-only regex
+  const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+
   const isValid =
     formData.name.trim() &&
-    /^\S+@\S+\.\S+$/.test(formData.email) &&
-    formData.phone.trim();
+    gmailRegex.test(formData.email) &&
+    formData.phone.length === 10;
 
+  // Handle input change
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    // Allow only numbers in phone field
+    if (name === "phone" && !/^\d*$/.test(value)) return;
+
+    setFormData({ ...formData, [name]: value });
     setError("");
     setSuccess("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isValid) return;
+
+    if (!isValid) {
+      setError("Please fill all required fields correctly");
+      return;
+    }
 
     try {
       setLoading(true);
       await API.post("/contacts", formData);
+
       setSuccess("Contact added successfully!");
       setFormData({ name: "", email: "", phone: "", message: "" });
       refreshContacts();
@@ -42,7 +56,7 @@ const ContactForm = ({ refreshContacts }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-card">
+    <form className="form-card" onSubmit={handleSubmit} noValidate>
       <h2>Add Contact</h2>
 
       <div className="form-grid">
@@ -57,7 +71,7 @@ const ContactForm = ({ refreshContacts }) => {
         <input
           type="email"
           name="email"
-          placeholder="Email *"
+          placeholder="Gmail address *"
           value={formData.email}
           onChange={handleChange}
         />
@@ -65,9 +79,10 @@ const ContactForm = ({ refreshContacts }) => {
         <input
           type="tel"
           name="phone"
-          placeholder="Phone *"
+          placeholder="Phone number *"
           value={formData.phone}
           onChange={handleChange}
+          maxLength={10}
         />
 
         <textarea
@@ -75,10 +90,11 @@ const ContactForm = ({ refreshContacts }) => {
           placeholder="Message (optional)"
           value={formData.message}
           onChange={handleChange}
+          rows="3"
         />
 
         <button type="submit" disabled={!isValid || loading}>
-          {loading ? "Submitting..." : isValid ? "Submit Contact" : "Fill Required Fields"}
+          {loading ? "Submitting..." : "Submit Contact"}
         </button>
       </div>
 
