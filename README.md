@@ -35,7 +35,7 @@ This project focuses on clean UI/UX, real-time data handling, and strong input v
 
 ---
 ## 📁 Project Structure
-
+```
 
 Contact-Management-Mern/
 │
@@ -60,7 +60,7 @@ Contact-Management-Mern/
 │
 └── README.md
 
-
+```
 
 
 ## 🎨 UI Highlights
