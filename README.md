@@ -34,7 +34,6 @@ This project focuses on clean UI/UX, real-time data handling, and strong input v
 - MongoDB  
 
 ---
-
 ## 📂 Project Structure
 
 Contact-Management-Mern/
@@ -46,21 +45,21 @@ Contact-Management-Mern/
 │ └── server.js
 │
 ├── frontend/
-│ ├── src/
-│ │ ├── components/
-│ │ │ ├── Header.jsx
-│ │ │ ├── ContactForm.jsx
-│ │ │ ├── ContactList.jsx
-│ │ │ ├── About.jsx
-│ │ │ └── Footer.jsx
-│ │ ├── App.js
-│ │ ├── index.css
-│ │ └── api.js
+│ └── src/
+│ ├── components/
+│ │ ├── Header.jsx
+│ │ ├── ContactForm.jsx
+│ │ ├── ContactList.jsx
+│ │ ├── About.jsx
+│ │ └── Footer.jsx
+│ │
+│ ├── App.js
+│ ├── api.js
+│ └── index.css
 │
 └── README.md
 
 
----
 
 ## 🎨 UI Highlights
 
