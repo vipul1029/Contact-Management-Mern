@@ -34,7 +34,8 @@ This project focuses on clean UI/UX, real-time data handling, and strong input v
 - MongoDB  
 
 ---
-## 📂 Project Structure
+## 📁 Project Structure
+
 
 Contact-Management-Mern/
 │
@@ -58,6 +59,7 @@ Contact-Management-Mern/
 │ └── index.css
 │
 └── README.md
+
 
 
 
